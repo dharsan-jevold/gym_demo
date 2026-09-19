@@ -1,0 +1,28 @@
+# Java / Maven
+backend/target/
+backend/.mvn/
+backend/*.log
+.m2/
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+# Electron build output
+frontend/release/
+frontend/dist/
+frontend/build/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
