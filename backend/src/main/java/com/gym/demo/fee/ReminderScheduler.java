@@ -12,9 +12,11 @@ public class ReminderScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(ReminderScheduler.class);
     private final FeeRepository feeRepository;
+    private final ReminderEmailService reminderEmailService;
 
-    public ReminderScheduler(FeeRepository feeRepository) {
+    public ReminderScheduler(FeeRepository feeRepository, ReminderEmailService reminderEmailService) {
         this.feeRepository = feeRepository;
+        this.reminderEmailService = reminderEmailService;
     }
 
     @Scheduled(cron = "0 0 9 * * *")
@@ -22,8 +24,11 @@ public class ReminderScheduler {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         feeRepository.findAll().stream()
                 .filter(fee -> !fee.isPaid() && fee.getDueDate().equals(tomorrow))
-                .forEach(fee -> log.info("Payment reminder: {} owes {} on {}",
-                        fee.getClient().getFirstName() + " " + fee.getClient().getLastName(),
-                        fee.getAmount(), fee.getDueDate()));
+            .forEach(fee -> {
+                log.info("Payment reminder: {} owes {} on {}",
+                    fee.getClient().getFirstName() + " " + fee.getClient().getLastName(),
+                    fee.getAmount(), fee.getDueDate());
+                reminderEmailService.sendReminder(fee);
+            });
     }
 }

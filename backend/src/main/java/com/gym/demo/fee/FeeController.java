@@ -1,5 +1,6 @@
 package com.gym.demo.fee;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,7 +43,9 @@ public class FeeController {
     public ResponseEntity<FeeResponse> createFee(@Valid @RequestBody FeeRequest request) {
         Client client = clientRepository.findById(Objects.requireNonNull(request.clientId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Client was not found"));
-        Fee savedFee = feeRepository.save(new Fee(client, request.amount(), request.dueDate(), request.paid()));
+        Fee fee = new Fee(client, request.amount(), request.dueDate(), request.paid());
+        if (request.paid()) fee.setPaidDate(LocalDate.now());
+        Fee savedFee = feeRepository.save(fee);
         return ResponseEntity.status(HttpStatus.CREATED).body(FeeResponse.from(savedFee));
     }
 
@@ -52,6 +55,7 @@ public class FeeController {
         fee.setAmount(request.amount());
         fee.setDueDate(request.dueDate());
         fee.setPaid(request.paid());
+        fee.setPaidDate(request.paid() ? fee.getPaidDate() == null ? LocalDate.now() : fee.getPaidDate() : null);
         return FeeResponse.from(feeRepository.save(fee));
     }
 
@@ -59,6 +63,7 @@ public class FeeController {
     public FeeResponse updatePayment(@PathVariable long id, @RequestBody PaymentRequest request) {
         Fee fee = feeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Fee was not found"));
         fee.setPaid(request.paid());
+        fee.setPaidDate(request.paid() ? LocalDate.now() : null);
         return FeeResponse.from(feeRepository.save(fee));
     }
 

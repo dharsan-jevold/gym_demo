@@ -2,6 +2,8 @@
 backend/target/
 backend/.mvn/
 backend/*.log
+backend/*.err
+backend/logfile
 .m2/
 
 # Node / React
@@ -15,6 +17,12 @@ frontend/npm-debug.log*
 Thumbs.db
 .idea/
 .vscode/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
 # Electron build output
 frontend/release/
 frontend/dist/
@@ -22,7 +30,3 @@ frontend/build/
 
 # Dependencies
 node_modules/
-
-# Environment files
-.env
-.env.*

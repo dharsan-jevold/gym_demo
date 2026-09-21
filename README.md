@@ -79,6 +79,8 @@ The installer is written to `frontend/release/`. The packaged application expect
 
 The local backend URL defaults to `http://localhost:8080`. To use a different local backend URL, copy `frontend/.env.example` to `frontend/.env.local` and change `API_BASE_URL`. Do not put database credentials in this file.
 
+To send renewal reminders by email, configure the backend SMTP environment variables before starting it: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, and optionally `SMTP_AUTH` and `SMTP_STARTTLS`. The daily job runs at 09:00 and emails each unpaid fee whose due date is tomorrow. Without `SMTP_HOST`, reminders are logged but not sent.
+
 ## Current scope
 
-The application supports client and fee creation, editing, deletion, payment status changes, dashboard counts, searchable and filterable lists, CSV fee reports, browser notifications, and a daily backend reminder job for unpaid fees due tomorrow. The Electron build produces a Windows NSIS installer; the backend remains a separate Spring Boot process backed by PostgreSQL.
+The application supports client and fee creation, editing, deletion, payment status changes, dashboard counts, searchable and filterable lists, CSV fee reports, browser notifications, and email reminders for unpaid fees due tomorrow. The Electron build produces a Windows NSIS installer; the backend remains a separate Spring Boot process backed by PostgreSQL.
